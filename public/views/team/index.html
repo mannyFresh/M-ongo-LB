@@ -1,0 +1,52 @@
+<h1>Teams</h1>
+
+<div class="container" ng-controller="TeamController">
+    <!-- <nav ng-controller="NavCtrl">
+      <a href="#home">Home</a> |
+      <span ng-show="!currentUser">
+          <a href="#login">Login</a> |
+          <a href="#register">Register</a>
+      </span>
+      <span ng-show="currentUser">
+          <a href="#profile">Profile</a> |
+          <a href="#logout" ng-click="logout()">Logout</a>
+      </span>
+    </nav>
+    <div ng-view>
+    </div>
+  -->
+  <table st-table="teams" class="table table-striped">
+    <thead>
+      <tr><!--
+        <th>
+          <input ng-model="team.city" class="form-control" />
+          <input ng-model="team.name" class="form-control" />
+        </th>
+        <th>
+          <button class="btn btn-success" ng-click="add(team)">
+            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+          </button>
+        </th>-->
+        <th>team name</th>
+        <th>franchise id</th>
+      </tr>
+      <!--
+      <tr>
+      	<th colspan="5">
+      		<input st-search placeholder="global search" class="input-sm form-control" type="search"/>
+      	</th>-->
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="team in teams">
+        <td><a href="#team/{{team.franchID}}">{{team.franchName}}</a></td>
+        <td>{{team.franchID}}</td>
+        <td>
+          <button class="btn btn-active" ng-click="">
+            <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
