@@ -1,1 +1,57 @@
-<h1>{{teamDetail.franchName}}</h1>
+<h1>{{teamDetails[teamDetails.length - 1].name}}</h1>
+
+<div class="container" ng-controller="TeamController">
+
+<table st-table="teams" class="table table-striped">
+    <thead>
+      <tr><!--
+        <th>
+          <input ng-model="team.city" class="form-control" />
+          <input ng-model="team.name" class="form-control" />
+        </th>
+        <th>
+          <button class="btn btn-success" ng-click="add(team)">
+            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+          </button>
+        </th>-->
+        <th>season</th>
+        <th>games</th>
+        <th>wins</th>
+        <th>losses</th>
+        <th>at bats</th>
+        <th>runs</th>
+        <th>hits</th>
+        <th>hr</th>
+        <th>bb</th>
+        <th>so</th>
+        <th>sb</th>
+      </tr>
+      <!--
+      <tr>
+      	<th colspan="5">
+      		<input st-search placeholder="global search" class="input-sm form-control" type="search"/>
+      	</th>-->
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="detail in teamDetails">
+        <td>{{detail.yearID}}</td>
+        <td>{{detail.G}}</td>
+        <td>{{detail.W}}</td>
+        <td>{{detail.L}}</td>
+        <td>{{detail.AB}}</td>
+        <td>{{detail.R}}</td>
+        <td>{{detail.H}}</td>
+        <td>{{detail.HR}}</td>
+        <td>{{detail.BB}}</td>
+        <td>{{detail.SO}}</td>
+        <td>{{detail.SB}}</td>
+        <td>
+          <button class="btn btn-active" ng-click="">
+            <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

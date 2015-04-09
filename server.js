@@ -9,7 +9,7 @@ var session       = require('express-session');
 
 // mongoose
 var mongojs = require('mongojs');
-var db = mongojs("mybaseballdb", ["TeamFranchises"]);
+var db = mongojs("mybaseballdb", ["TeamFranchises", "Master", "Teams"]);
 var mongoose = require('mongoose');
 
 var connectionString = process.env.OPENSHIFT_MONGODB_DB_URL || 'mongodb://localhost/mybaseballdb';
@@ -170,17 +170,43 @@ app.post("/rest/user", auth, function(req, res){
 });
 
 // BASEBALL DATA REQUESTS
+// get the index of baseball teams
 app.get('/rest/team', function(req, res) {
     db.TeamFranchises.find().sort({franchName: 1}, function(err, data) {
         res.json(data);
     });
 });
 
+// get the detail of a baseball team
 app.get('/rest/team/:franchID', function(req, res) {
-    db.TeamFranchises.find({franchID: req.params.franchID}, function(err, data) {
+
+    var teamIDBR = req.params.franchID;
+
+    db.Teams.find({teamIDBR: teamIDBR}, function(err, data) {
+        res.json(data);
+    });
+    /*
+    db.TeamFranchises.findOne({franchID: franchID}, function(err, data) {
+        res.json(data);
+    });*/
+});
+
+// get the index of baseball players
+app.get('/rest/player', function(req, res) {
+    db.Master.find({nameLast: 'Johnson'}, function(err, data) {
         res.json(data);
     });
 });
 
+// get the detail of a baseball player
+app.get('/rest/player/:playerID', function(req, res) {
+
+    var playerID = req.params.playerID;
+
+    db.Master.find({playerID: playerID}, function(err, data) {
+        console.log(data);
+        res.json(data);
+    });
+});
 
 app.listen(3000);

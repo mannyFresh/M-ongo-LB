@@ -1,0 +1,34 @@
+<h1>Players</h1>
+
+<div class="container" ng-controller="PlayerController">
+
+  <table st-table="players" class="table table-striped">
+    <thead>
+      <tr>
+        <th>player name</th>
+        <th>player id</th>
+        <th>bats</th>
+        <th>throws</th>
+      </tr>
+      <!--
+      <tr>
+      	<th colspan="5">
+      		<input st-search placeholder="global search" class="input-sm form-control" type="search"/>
+      	</th>-->
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="player in players">
+        <td><a href="#player/{{player.playerID}}">{{player.nameFirst}} {{player.nameLast}}</a></td>
+        <td>{{player.playerID}}</td>
+        <td>{{player.bats}}</td>
+        <td>{{player.throws}}</td>
+        <td>
+          <button class="btn btn-active" ng-click="">
+            <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

@@ -1,5 +1,5 @@
 
-var app = angular.module("PassportApp", ["ngRoute", "smart-table"]);
+var app = angular.module("PassportApp", ["ngRoute", "smart-table", "siyfion.sfTypeahead"]);
 
 app.config(function($routeProvider, $httpProvider) {
     $routeProvider
@@ -31,9 +31,23 @@ app.config(function($routeProvider, $httpProvider) {
             loggedin: checkLoggedin
         }
       })
-      .when('/team/:id', {
+      .when('/team/:franchID', {
         templateUrl: 'views/team/detail.html',
         controller: 'TeamController',
+        resolve: {
+              loggedin: checkLoggedin
+          }
+      })
+      .when('/player', {
+        templateUrl: 'views/player/index.html',
+        controller: 'PlayerController',
+        resolve: {
+              loggedin: checkLoggedin
+          }
+      })
+      .when('/player/:playerID', {
+        templateUrl: 'views/player/detail.html',
+        controller: 'PlayerController',
         resolve: {
               loggedin: checkLoggedin
           }
@@ -76,4 +90,31 @@ app.controller("NavCtrl", function($scope, $http, $location, $rootScope){
             $location.url("/home");
         });
     };
+/*
+    $scope.selectedPlayer = null;
+
+    // instantiate the bloodhound suggestion engine
+    var players = new Bloodhound({
+      datumTokenizer: function(d) { return Bloodhound.tokenizers.whitespace(d.num); },
+      queryTokenizer: Bloodhound.tokenizers.whitespace,
+      remote: "/rest/player"
+    });
+
+    // initialize the bloodhound suggestion engine
+    players.initialize();
+    
+    $scope.playersDataset = {
+      displayKey: 'play',
+      source: players.ttAdapter()
+    };
+    
+    // Typeahead options object
+    $scope.exampleOptions = {
+      highlight: true
+    };
+    
+    $scope.exampleOptionsNonEditable = {
+      highlight: true,
+      editable: false // the new feature
+    };*/
 });
