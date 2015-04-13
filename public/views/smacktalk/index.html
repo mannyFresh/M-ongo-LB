@@ -1,0 +1,27 @@
+<h1>
+	Smacktalk
+	<button class="btn btn-primary" ng-click="open()">
+	    New Post&nbsp&nbsp<span class="glyphicon glyphicon-bullhorn" aria-hidden="true"></span>
+	</button>
+</h1>
+<div class="container" ng-controller="SmacktalkController">
+	<script type="text/ng-template" id="myModalContent.html">
+        <div class="modal-header">
+            <h3 class="modal-title">talk some smack...</h3>
+        </div>
+        <div class="modal-body">
+        	<form class="form-horizontal">                
+                <textarea ng-model="smackPost" class="form-control" rows="3" maxlength="140">...</textarea>
+            </form>
+
+        </div>
+
+        <div class="modal-footer">
+        	<span>{{140 - smackPost.length}}</span>
+            <button class="btn btn-primary" ng-click="ok()">say it</button>
+            <button class="btn btn-warning" ng-click="cancel()">cancel</button>
+        </div>
+    </script>
+
+    <button class="btn btn-default" ng-click="open()">Open me!</button>
+</div>

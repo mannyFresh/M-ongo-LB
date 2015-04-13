@@ -1,5 +1,5 @@
 <h1>Players</h1>
-
+{{currentUser}}
 <div class="container" ng-controller="PlayerController">
 
   <table st-table="players" class="table table-striped">
@@ -19,12 +19,12 @@
     </thead>
     <tbody>
       <tr ng-repeat="player in players">
-        <td><a href="#player/{{player.playerID}}">{{player.nameFirst}} {{player.nameLast}}</a></td>
+        <td><a href="#/player/{{player.playerID}}">{{player.nameFirst}} {{player.nameLast}}</a></td>
         <td>{{player.playerID}}</td>
         <td>{{player.bats}}</td>
         <td>{{player.throws}}</td>
         <td>
-          <button class="btn btn-active" ng-click="">
+          <button class="btn btn-active" ng-class="{ 'btn-warning' : ((currentUser.players.indexOf(player.playerID) != -1) || isActive)}" ng-click="editFavPlayer(currentUser, player.playerID); isActive = !isActive">
             <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
           </button>
         </td>

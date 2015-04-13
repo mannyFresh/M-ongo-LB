@@ -15,6 +15,7 @@
     <div ng-view>
     </div>
   -->
+  {{currentUser}}
   <table st-table="teams" class="table table-striped">
     <thead>
       <tr><!--
@@ -42,9 +43,14 @@
         <td><a href="#team/{{team.franchID}}" ng-click="getTeam(myName)">{{team.franchName}}</a></td>
         <td>{{team.franchID}}</td>
         <td>
-          <button class="btn btn-active" ng-click="">
+          <button class="btn btn-active" ng-class="{ 'btn-warning' : ((currentUser.teams.indexOf(team.franchID) != -1) || isActive)}" ng-click="editFav(currentUser, team.franchID); isActive = !isActive">
             <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
           </button>
+
+          <button type="button" class="btn btn-default" ng-class="{'btn-primary':isActiveUpload,  'btn-default':!isActiveUpload}" ng-click="isActiveUpload = !isActiveUpload">Upload</button>
+
+<button type="button" class="btn btn-default" ng-class="{'btn-primary':isActiveDownload,   'btn-default':!isActiveDownload}" ng-click="isActiveDownload = !isActiveDownload">Download</button>
+
         </td>
       </tr>
     </tbody>

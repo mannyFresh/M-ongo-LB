@@ -9,23 +9,34 @@ app.controller("TeamController", function($scope, $http, $routeParams) {
       $scope.teamDetails = response;
     });
 
-    $scope.getTeam = function(teamName) {
-      $scope.teamDetailName = teamName;
+    $scope.editFav = function(currentUser, franchID) {
+      //$http.put('rest/user/')
+      //console.log(currentUser);
+      /*
+      var newTeam = {
+        franchID: franchID,
+        teamName: franchName
+      }
+*/
+      //currentUser.teams.push(newTeam);
+
+      if (currentUser.teams.indexOf(franchID) > -1) {
+        $http.delete('/rest/user/' + currentUser._id + '/team/' + franchID)
+        .success(function(response) {
+          //$scope.users = users;
+          $scope.users = response;
+          console.log(response);
+        });
+      }
+      
+      else {
+        $http.put('/rest/user/' + currentUser._id + '/team/' + franchID)
+        .success(function(response){
+            $scope.users = response;
+
+            console.log(response);
+        });
+      }
     }
 
-    $scope.remove = function(id)
-    {
-      $http.delete('/rest/team/' + id)
-      .success(function (response) {
-        $scope.teams = response;
-      });
-    }
-
-    $scope.add = function(team)
-    {
-      $http.post('/rest/team', team)
-      .success(function (response) {
-        $scope.teams = response;
-      });
-    }
 });

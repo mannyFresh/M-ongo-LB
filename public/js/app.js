@@ -1,5 +1,5 @@
 
-var app = angular.module("PassportApp", ["ngRoute", "smart-table", "siyfion.sfTypeahead"]);
+var app = angular.module("PassportApp", ["ngRoute", "smart-table", "ui.bootstrap", "siyfion.sfTypeahead"]);
 
 app.config(function($routeProvider, $httpProvider) {
     $routeProvider
@@ -47,7 +47,14 @@ app.config(function($routeProvider, $httpProvider) {
       })
       .when('/player/:playerID', {
         templateUrl: 'views/player/detail.html',
-        controller: 'PlayerController',
+        controller: 'PlayerDetailController',
+        resolve: {
+              loggedin: checkLoggedin
+          }
+      })
+      .when('/smacktalk', {
+        templateUrl: 'views/smacktalk/index.html',
+        controller: 'SmacktalkController',
         resolve: {
               loggedin: checkLoggedin
           }

@@ -7,6 +7,8 @@
 <script src="js/app.js"></script>
 <script src="js/smart-table.js"></script>
 <script src="js/angular-typeahead.js"></script>
+<script src="js/ui-bootstrap.js"></script>
+<script src="js/ui-bootstrap-tpls.js"></script>
 <script src="js/bloodhound.js"></script>
 <script src="js/typeahead.bundle.js"></script>
 <script src="js/typeahead.jquery.js"></script>
@@ -16,6 +18,7 @@
 <script src="views/register/register.js"></script>
 <script src="views/team/team.js"></script>
 <script src="views/player/player.js"></script>
+<script src="views/smacktalk/smacktalk.js"></script>
 <body ng-app="PassportApp">
     <div role="navigation">
       <nav class="navbar navbar-inverse" ng-controller="NavCtrl">
@@ -51,15 +54,27 @@
                 <li ng-show="currentUser">
                     <a href="#player">Players</a>
                 </li>
+                <li ng-show="currentUser">
+                    <a href="#smacktalk">Smacktalk</a>
+                </li>
             </ul>
-            <ul class="nav navbar-nav navbar-right">
+            <ul class="nav navbar-nav navbar-right col-sm-2">
                 <!--<li><input class='typeahead' type="text" sf-typeahead options="exampleOptions" datasets="playersDataset" ng-model="selectedPlayer"></li>-->
-                <li>
+                <li class="">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="courseTitleUpdateInput" placeholder="Course Title">
+                            <span class="input-group-addon"><span class="glyphicon glyphicon-pencil"></span>
+                                </span>
+                        </div>
+                    </div>
+                </li>
+               <!-- <li>
                     <a href="#">Logout</a>
                 </li>
                 <li>
                     <a href="#">Blog</a>
-                </li>
+                </li>-->
             </ul>
         </div>
       </nav>

@@ -9,7 +9,8 @@ var session       = require('express-session');
 
 // mongoose
 var mongojs = require('mongojs');
-var db = mongojs("mybaseballdb", ["TeamFranchises", "Master", "Teams"]);
+var ObjectId = mongojs.ObjectId;
+var db = mongojs("mybaseballdb", ["TeamFranchises", "Master", "Teams", "Fielding", "Batting", "Pitching", "usermodels"]);
 var mongoose = require('mongoose');
 
 var connectionString = process.env.OPENSHIFT_MONGODB_DB_URL || 'mongodb://localhost/mybaseballdb';
@@ -22,10 +23,20 @@ var UserSchema = new mongoose.Schema({
     firstName: String,
     lastName: String,
     email: String,
-    roles: [String]
+    roles: [String],
+    teams: [String],
+    players: [String]
 });
 
 var UserModel = mongoose.model('UserModel', UserSchema);
+
+var SmacktalkSchema = new mongoose.Schema({
+    author: String,
+    date: Date,
+    text: String
+});
+
+var SmacktalkModel = mongoose.model('SmacktalkModel', SmacktalkSchema);
 
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
@@ -113,6 +124,20 @@ app.post('/register', function(req, res)
     });
 });
 
+//// SMACKTALK CRUD METHODS
+app.post('/rest/smacktalk/', function(req, res) {
+    var newSmacktalk = req.body;
+
+    newSmacktalk.save(function(err, smacktalk) {
+        res.json(smacktalk);
+    });
+});
+app.get('/rest/smacktalk', function(req, res) {
+    db.smacktalks.find(function(err, smacktalks) {
+        res.json(smacktalks);
+    });
+});
+
 var auth = function(req, res, next)
 {
     if (!req.isAuthenticated())
@@ -123,8 +148,13 @@ var auth = function(req, res, next)
 
 app.get("/rest/user", auth, function(req, res)
 {
+    /*
     UserModel.find(function(err, users)
     {
+        res.json(users);
+    });*/
+    db.usermodels.find(function(err, users) {
+        console.log(users);
         res.json(users);
     });
 });
@@ -140,14 +170,108 @@ app.delete("/rest/user/:id", auth, function(req, res){
 });
 
 app.put("/rest/user/:id", auth, function(req, res){
+    //console.log(req.body);
+
     UserModel.findById(req.params.id, function(err, user){
         user.update(req.body, function(err, count){
-            UserModel.find(function(err, users){
+            console.log(user);
+            console.log(req.body);
+            res.json(req.body);
+        });
+    });
+/*
+    db.usermodels.find({ "_id": ObjectId('"' + req.params.id +'"')}, function(user, err) {
+        user.update(req.body, function(count, err) {
+            db.usermodels.find(function(users, err) {
                 res.json(users);
             });
         });
     });
+*/
 });
+
+// Adding and removing favorite baseball teams
+app.put("/rest/user/:id/team/:franchID", auth, function(req, res) {
+/*
+    db.usermodels.update(
+        { _id: ObjectId(req.params.id) }, 
+        { $addToSet: { teams: req.params.franchID } },
+        function (err, response) {
+            console.log("hihi");
+            res.json(response);
+        });
+*/
+    db.runCommand(
+    {
+        findAndModify: "usermodels",
+        query: { _id: ObjectId(req.params.id) },
+        update: { $addToSet: { teams: req.params.franchID } },
+        new: true
+    }, function (err, response) {
+            res.json(response.value);
+        });
+});
+
+app.delete("/rest/user/:id/team/:franchID", auth, function(req, res) {
+    /*db.usermodels.update(
+        { _id: ObjectId(req.params.id) },
+        { $pull: { teams : req.params.franchID } },
+        function (err, response) {
+            res.json(response);
+        });*/
+    db.runCommand(
+    {
+        findAndModify: "usermodels",
+        query: { _id: ObjectId(req.params.id) },
+        update: { $pull: { teams : req.params.franchID } },
+        new: true
+    }, function (err, response) {
+            res.json(response.value);
+        });
+});
+
+//// Adding and removing favorite baseball players
+app.put("/rest/user/:id/player/:playerID", auth, function(req, res) {
+/*
+    db.usermodels.update(
+        { _id: ObjectId(req.params.id) }, 
+        { $addToSet: { teams: req.params.franchID } },
+        function (err, response) {
+            console.log("hihi");
+            res.json(response);
+        });
+*/
+    db.runCommand(
+    {
+        findAndModify: "usermodels",
+        query: { _id: ObjectId(req.params.id) },
+        update: { $addToSet: { players: req.params.playerID } },
+        new: true
+    }, function (err, response) {
+            res.json(response.value);
+            console.log(response.value);
+        });
+});
+
+app.delete("/rest/user/:id/player/:playerID", auth, function(req, res) {
+    /*db.usermodels.update(
+        { _id: ObjectId(req.params.id) },
+        { $pull: { teams : req.params.franchID } },
+        function (err, response) {
+            res.json(response);
+        });*/
+    db.runCommand(
+    {
+        findAndModify: "usermodels",
+        query: { _id: ObjectId(req.params.id) },
+        update: { $pull: { players : req.params.playerID } },
+        new: true
+    }, function (err, response) {
+            res.json(response.value);
+        });
+});
+
+
 
 app.post("/rest/user", auth, function(req, res){
     UserModel.findOne({username: req.body.username}, function(err, user) {
@@ -168,6 +292,8 @@ app.post("/rest/user", auth, function(req, res){
         }
     });
 });
+
+
 
 // BASEBALL DATA REQUESTS
 // get the index of baseball teams
@@ -203,9 +329,60 @@ app.get('/rest/player/:playerID', function(req, res) {
 
     var playerID = req.params.playerID;
 
-    db.Master.find({playerID: playerID}, function(err, data) {
-        console.log(data);
-        res.json(data);
+    db.Fielding.find({playerID: playerID}).sort({yearID: -1}[0], function(err, data) {
+        //console.log(data);
+        var playerObject = data[0];
+        var seasonStats = {};
+        var player = {
+                    playerID: playerObject.playerID,
+                    playerFirstName: "",
+                    playerLastName: "",
+                    birthYear: "", 
+                    birthCountry: "", 
+                    birthState: "",
+                    birthCity: "", 
+                    weight: "",
+                    height: "", 
+                    bats: "",
+                    throws: "",
+                    debut: "",
+                    teamID: playerObject.teamID,
+                    lgID: playerObject.lgID,
+                    POS: playerObject.POS,
+                    seasonStats: []
+                }
+        console.log(player);
+        db.Master.find({playerID: playerID}, function(err, data) {
+            console.log(data[0]);
+            player.playerFirstName = data[0].nameFirst;
+            player.playerLastName = data[0].nameLast;
+            player.birthYear = data[0].birthYear;
+            player.birthCountry = data[0].birthCountry;
+            player.birthState = data[0].birthState;
+            player.birthCity = data[0].birthCity;
+            player.weight = data[0].weight;
+            player.height = data[0].height;
+            player.bats = data[0].bats;
+            player.throws = data[0].throws;
+            player.debut = data[0].debut;
+        });
+        if (playerObject.POS == "P") {
+            db.Pitching.find({playerID: playerID}, function(err, data) {
+                //seasonStats = data;
+                
+                player.seasonStats = data;
+
+                res.json(player);
+            });
+        }
+        else {
+            db.Batting.find({playerID: playerID}, function(err, data) {
+                seasonStats = data;
+                //console.log(seasonStats);
+                player.seasonStats = data
+                res.json(player);
+            });
+        }   
     });
 });
 

@@ -1,1 +1,59 @@
-<h1>{{playerDetails.nameFirst}} {{playerDetails.nameLast}}</h1>
+<h1>
+	{{playerDetails.playerFirstName}} {{playerDetails.playerLastName}}
+	<span>
+		<small>{{playerDetails.teamID}}</small>
+	</span>
+	<br>
+	<small>{{playerDetails.POS}}</small>
+	<br>
+	<div class="col-md-6 col-md-offset-2">
+		<table class="table table-striped">
+			<tbody>
+				<tr>
+					<th>Birthyear:</th>
+					<td>{{playerDetails.birthYear}}</td>
+					<th>Birthplace:</th>
+					<td>{{playerDetails.birthCity}}, {{playerDetails.birthState}}, {{playerDetails.birthCountry}}</td>
+				</tr>
+				<tr>
+					<th>Debut:</th>
+					<td>{{playerDetails.debut}}</td>
+				</tr>
+				<tr>
+					<th>Height:</th>
+					<td>{{playerDetails.height}}</td>
+					<th>Weight:</th>
+					<td>{{playerDetails.weight}}</td>
+				</tr>
+				<tr>
+					<th>Bats:</th>
+					<td>{{playerDetails.bats}}</td>
+					<th>Throws:</th>
+					<td>{{playerDetails.throws}}</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</h1>
+
+<table st-table="playerDetails.seasonStats" class="table table-striped">
+    <thead>
+      <tr>
+        <th>season</th>
+        <th>team</th>
+      </tr>
+      <!--
+      <tr>
+      	<th colspan="5">
+      		<input st-search placeholder="global search" class="input-sm form-control" type="search"/>
+      	</th>-->
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="seasonStat in playerDetails.seasonStats">
+        <td>{{seasonStat.yearID}}</td>
+        <td>{{seasonStat.teamID}}</td>
+      </tr>
+    </tbody>
+  </table>
+
