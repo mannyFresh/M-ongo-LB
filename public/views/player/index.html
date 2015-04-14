@@ -2,10 +2,10 @@
 {{currentUser}}
 <div class="container" ng-controller="PlayerController">
 
-  <table st-table="players" class="table table-striped">
+  <table st-table="playersDisplay" st-safe-src="players" class="table table-striped">
     <thead>
       <tr>
-        <th>player name</th>
+        <th st-sort="nameFirst; nameLast">player name</th>
         <th>player id</th>
         <th>bats</th>
         <th>throws</th>
@@ -14,17 +14,24 @@
       <tr>
       	<th colspan="5">
       		<input st-search placeholder="global search" class="input-sm form-control" type="search"/>
-      	</th>-->
+      	</th>
+      </tr>-->
+      <tr>
+        <th>
+          <input st-search="nameFirst" placeholder="search for player name..." class="input-sm form-control" type="search"/>
+        </th>
       </tr>
     </thead>
     <tbody>
-      <tr ng-repeat="player in players">
-        <td><a href="#/player/{{player.playerID}}">{{player.nameFirst}} {{player.nameLast}}</a></td>
+      <tr ng-repeat="player in playersDisplay">
+        <td>
+          <a href="#/player/{{player.playerID}}">{{player.nameFirst}} {{player.nameLast}}</a>
+        </td>
         <td>{{player.playerID}}</td>
         <td>{{player.bats}}</td>
         <td>{{player.throws}}</td>
         <td>
-          <button class="btn btn-active" ng-class="{ 'btn-warning' : ((currentUser.players.indexOf(player.playerID) != -1) || isActive)}" ng-click="editFavPlayer(currentUser, player.playerID); isActive = !isActive">
+          <button class="btn btn-active" ng-class="{ 'btn-warning' : ((currentUser.players.indexOf(player.playerID) != -1))}" ng-click="editFavPlayer(currentUser, player.playerID); isActive = !isActive">
             <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
           </button>
         </td>

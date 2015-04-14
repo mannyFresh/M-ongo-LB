@@ -42,6 +42,7 @@ app.controller("PlayerController", function($scope, $http, $routeParams) {
         .success(function(response) {
           //$scope.users = users;
           $scope.users = response;
+          $scope.currentUser = response;
           console.log($scope.users);
         });
       }
@@ -50,11 +51,12 @@ app.controller("PlayerController", function($scope, $http, $routeParams) {
         $http.put('/rest/user/' + currentUser._id + '/player/' + playerID)
         .success(function(response){
             $scope.users = response;
-
+            $scope.currentUser = response;
             console.log($scope.users);
         });
       }
     }
+
 });
 
 app.controller("PlayerDetailController", function($scope, $http, $routeParams) {
@@ -63,4 +65,35 @@ app.controller("PlayerDetailController", function($scope, $http, $routeParams) {
       console.log(response);
       $scope.playerDetails = response;
     });
+
+    $scope.editFavPlayer = function(currentUser, playerID) {
+      //$http.put('rest/user/')
+      //console.log(currentUser);
+      /*
+      var newTeam = {
+        franchID: franchID,
+        teamName: franchName
+      }
+*/
+      //currentUser.teams.push(newTeam);
+
+      if (currentUser.players.indexOf(playerID) > -1) {
+        $http.delete('/rest/user/' + currentUser._id + '/player/' + playerID)
+        .success(function(response) {
+          //$scope.users = users;
+          $scope.users = response;
+          $scope.currentUser = response;
+          console.log($scope.users);
+        });
+      }
+      
+      else {
+        $http.put('/rest/user/' + currentUser._id + '/player/' + playerID)
+        .success(function(response){
+            $scope.users = response;
+            $scope.currentUser = response;
+            console.log($scope.users);
+        });
+      }
+    }
 });

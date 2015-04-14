@@ -1,4 +1,5 @@
 <link href="css/bootstrap.css" rel="stylesheet"/>
+<link href="css/typeahead.css" rel="stylesheet"/>
 <script src="js/jquery-1.11.2.js"></script>
 <script src="js/bootstrap.js"></script>
 <script src="js/bootstrap.min.js"></script>
@@ -58,14 +59,15 @@
                     <a href="#smacktalk">Smacktalk</a>
                 </li>
             </ul>
-            <ul class="nav navbar-nav navbar-right col-sm-2">
+            <ul class="nav navbar-nav navbar-right">
                 <!--<li><input class='typeahead' type="text" sf-typeahead options="exampleOptions" datasets="playersDataset" ng-model="selectedPlayer"></li>-->
-                <li class="">
+                <li ng-show="currentUser">
                     <div class="form-group">
-                        <div class="input-group">
-                            <input type="text" class="form-control" id="courseTitleUpdateInput" placeholder="Course Title">
+                        <div class="input-group col-sm-1">
+                            <!--<input type="text" class="form-control typeahead" sf-typeahead options="exampleOptionsNonEditable" datasets="numbersDataset" ng-model="selectedNumberNonEditable">
                             <span class="input-group-addon"><span class="glyphicon glyphicon-pencil"></span>
-                                </span>
+                                </span>-->
+                                    <input class='typeahead' type="text" sf-typeahead datasets="playersDataset" ng-model="selectedNumberNonEditable">
                         </div>
                     </div>
                 </li>

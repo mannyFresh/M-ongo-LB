@@ -16,26 +16,18 @@
     </div>
   -->
   {{currentUser}}
+  <!--
   <table st-table="teams" class="table table-striped">
     <thead>
-      <tr><!--
-        <th>
-          <input ng-model="team.city" class="form-control" />
-          <input ng-model="team.name" class="form-control" />
-        </th>
-        <th>
-          <button class="btn btn-success" ng-click="add(team)">
-            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-          </button>
-        </th>-->
-        <th>team name</th>
+      <tr>
+        <th st-sort="franchName">team name</th>
         <th>franchise id</th>
       </tr>
-      <!--
       <tr>
-      	<th colspan="5">
-      		<input st-search placeholder="global search" class="input-sm form-control" type="search"/>
-      	</th>-->
+        <th>
+          <input st-search="franchName" placeholder="search for team name" class="input-sm form-control" type="search"/>
+        </th>
+      </tr>
       </tr>
     </thead>
     <tbody>
@@ -43,16 +35,37 @@
         <td><a href="#team/{{team.franchID}}" ng-click="getTeam(myName)">{{team.franchName}}</a></td>
         <td>{{team.franchID}}</td>
         <td>
-          <button class="btn btn-active" ng-class="{ 'btn-warning' : ((currentUser.teams.indexOf(team.franchID) != -1) || isActive)}" ng-click="editFav(currentUser, team.franchID); isActive = !isActive">
+          <button class="btn btn-active" ng-class="{ 'btn-warning' : ((currentUser.teams.indexOf(team.franchID) != -1))}" ng-click="editFav(currentUser, team.franchID); isActive = !isActive">
             <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
           </button>
-
-          <button type="button" class="btn btn-default" ng-class="{'btn-primary':isActiveUpload,  'btn-default':!isActiveUpload}" ng-click="isActiveUpload = !isActiveUpload">Upload</button>
-
-<button type="button" class="btn btn-default" ng-class="{'btn-primary':isActiveDownload,   'btn-default':!isActiveDownload}" ng-click="isActiveDownload = !isActiveDownload">Download</button>
-
         </td>
       </tr>
     </tbody>
-  </table>
+  </table>-->
+  <table st-table="teamsDisplay" st-safe-src="teams" class="table table-striped">
+  <thead>
+  <tr>
+    <th st-sort="franchName">team name</th>
+    <th st-sort="franchID">franchID</th>
+  </tr>
+  <tr>
+    <th>
+      <input st-search="franchName" placeholder="search for team name..." class="input-sm form-control" type="search"/>
+    </th>
+  </tr>
+  </thead>
+  <tbody>
+    <tr ng-repeat="team in teamsDisplay">
+      <td>
+        <a href="#team/{{team.franchID}}" ng-click="getTeam(myName)">{{team.franchName}}</a>
+      </td>
+      <td>{{team.franchID}}</td>
+      <td>
+        <button class="btn btn-active" ng-class="{ 'btn-warning' : ((currentUser.teams.indexOf(team.franchID) != -1))}" ng-click="editFav(currentUser, team.franchID); isActive = !isActive">
+          <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
+        </button>
+      </td>
+    </tr>
+  </tbody>
+</table>
 </div>

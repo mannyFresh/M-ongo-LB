@@ -1,4 +1,5 @@
 app.controller("TeamController", function($scope, $http, $routeParams) {
+
     $http.get('/rest/team')
     .success(function (response) {
       $scope.teams = response;
@@ -8,6 +9,13 @@ app.controller("TeamController", function($scope, $http, $routeParams) {
     .success(function (response) {
       $scope.teamDetails = response;
     });
+
+    $scope.isFav = function(currentUser, teamID) {
+      if (currentUser.teams.indexOf(teamID) != -1) {
+        var isActive = true;
+        return isActive;
+      }
+    }
 
     $scope.editFav = function(currentUser, franchID) {
       //$http.put('rest/user/')
@@ -25,6 +33,7 @@ app.controller("TeamController", function($scope, $http, $routeParams) {
         .success(function(response) {
           //$scope.users = users;
           $scope.users = response;
+          $scope.currentUser = response;
           console.log(response);
         });
       }
@@ -33,7 +42,7 @@ app.controller("TeamController", function($scope, $http, $routeParams) {
         $http.put('/rest/user/' + currentUser._id + '/team/' + franchID)
         .success(function(response){
             $scope.users = response;
-
+            $scope.currentUser = response;
             console.log(response);
         });
       }
