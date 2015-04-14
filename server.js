@@ -10,7 +10,7 @@ var session       = require('express-session');
 // mongoose
 var mongojs = require('mongojs');
 var ObjectId = mongojs.ObjectId;
-var db = mongojs("mybaseballdb", ["TeamFranchises", "Master", "Teams", "Fielding", "Batting", "Pitching", "usermodels"]);
+var db = mongojs("mybaseballdb", ["TeamFranchises", "Master", "Teams", "Fielding", "Batting", "Pitching", "usermodels", "smacktalks"]);
 var mongoose = require('mongoose');
 
 var connectionString = process.env.OPENSHIFT_MONGODB_DB_URL || 'mongodb://localhost/mybaseballdb';
@@ -31,9 +31,9 @@ var UserSchema = new mongoose.Schema({
 var UserModel = mongoose.model('UserModel', UserSchema);
 
 var SmacktalkSchema = new mongoose.Schema({
+    text: String,
     author: String,
     date: Date,
-    text: String
 });
 
 var SmacktalkModel = mongoose.model('SmacktalkModel', SmacktalkSchema);
@@ -128,9 +128,13 @@ app.post('/register', function(req, res)
 app.post('/rest/smacktalk/', function(req, res) {
     var newSmacktalk = req.body;
 
-    newSmacktalk.save(function(err, smacktalk) {
+    db.smacktalks.insert(newSmacktalk, 
+        db.smacktalks.find(function(err, smacktalks) {
+            res.json(smacktalks);
+        }));
+    /*db.smacktalks.insert(newSmacktalk, function (err, smacktalk) {
         res.json(smacktalk);
-    });
+    });*/
 });
 app.get('/rest/smacktalk', function(req, res) {
     db.smacktalks.find(function(err, smacktalks) {
@@ -154,7 +158,6 @@ app.get("/rest/user", auth, function(req, res)
         res.json(users);
     });*/
     db.usermodels.find(function(err, users) {
-        console.log(users);
         res.json(users);
     });
 });
@@ -174,8 +177,7 @@ app.put("/rest/user/:id", auth, function(req, res){
 
     UserModel.findById(req.params.id, function(err, user){
         user.update(req.body, function(err, count){
-            console.log(user);
-            console.log(req.body);
+
             res.json(req.body);
         });
     });
@@ -249,7 +251,6 @@ app.put("/rest/user/:id/player/:playerID", auth, function(req, res) {
         new: true
     }, function (err, response) {
             res.json(response.value);
-            console.log(response.value);
         });
 });
 
@@ -351,9 +352,7 @@ app.get('/rest/player/:playerID', function(req, res) {
                     POS: playerObject.POS,
                     seasonStats: []
                 }
-        console.log(player);
         db.Master.find({playerID: playerID}, function(err, data) {
-            console.log(data[0]);
             player.playerFirstName = data[0].nameFirst;
             player.playerLastName = data[0].nameLast;
             player.birthYear = data[0].birthYear;
@@ -378,7 +377,7 @@ app.get('/rest/player/:playerID', function(req, res) {
         else {
             db.Batting.find({playerID: playerID}, function(err, data) {
                 seasonStats = data;
-                //console.log(seasonStats);
+
                 player.seasonStats = data
                 res.json(player);
             });

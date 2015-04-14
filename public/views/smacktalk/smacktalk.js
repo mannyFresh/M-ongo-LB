@@ -1,8 +1,20 @@
 app.controller("SmacktalkController", function($scope, $modal, $http, $log) {
-    /*$http.get('/rest/smacktalk')
+    $http.get('/rest/smacktalk')
     .success(function (response) {
-      $scope.smacktalk = response;
-    });*/
+      $scope.smacktalks = response;
+    });
+
+
+
+    $scope.createSmack = function(smackPost) {
+      smackPost.author = currentUser;
+      console.log(smackPost);
+      $http.post('/rest/smacktalk', smackPost)
+      .success(function (response) {
+        $scope.smacktalks = response;
+        console.log(response);
+      });
+    }
 
     $scope.open = function (size) {
 
@@ -30,16 +42,23 @@ app.controller("SmacktalkController", function($scope, $modal, $http, $log) {
 
 });
 
-angular.module('ui.bootstrap').controller('ModalInstanceCtrl', function ($scope, $modalInstance) {
+angular.module('ui.bootstrap').controller('ModalInstanceCtrl', function ($scope, $modalInstance, $http) {
   /*
   $scope.items = items;
   $scope.selected = {
     item: $scope.items[0]
   };*/
 
-  $scope.ok = function () {
+  $scope.ok = function (smackPost, currentUser) {
     //$modalInstance.close($scope.selected.item);
     $modalInstance.close();
+    smackPost.author = currentUser.username;
+    smackPost.date = new Date();
+      $http.post('/rest/smacktalk', smackPost)
+      .success(function (response) {
+        $scope.smacktalks = response;
+        //console.log(response);
+      });
   };
 
   $scope.cancel = function () {
