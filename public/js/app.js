@@ -4,14 +4,18 @@ var app = angular.module("PassportApp", ["ngRoute", "smart-table", "ui.bootstrap
 app.config(function($routeProvider, $httpProvider) {
     $routeProvider
       .when('/home', {
-          templateUrl: 'views/home/home.html',
-          resolve: {
-              loggedin: checkLoggedin
-          }
+          templateUrl: 'views/home/home.html'
       })
       .when('/profile', {
           templateUrl: 'views/profile/profile.html',
           controller: 'ProfileCtrl',
+          resolve: {
+              loggedin: checkLoggedin
+          }
+      })
+      .when('/profile/:username', {
+          templateUrl: 'views/profile/detail.html',
+          controller: 'ProfileDetailController',
           resolve: {
               loggedin: checkLoggedin
           }
@@ -82,7 +86,7 @@ var checkLoggedin = function($q, $timeout, $http, $location, $rootScope)
         {
             $rootScope.errorMessage = 'You need to log in.';
             deferred.reject();
-            $location.url('/login');
+            $location.url('/home');
         }
     });
     

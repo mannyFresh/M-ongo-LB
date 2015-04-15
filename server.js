@@ -124,6 +124,17 @@ app.post('/register', function(req, res)
     });
 });
 
+/// RETRIEVE USER PROFILE
+app.get('/rest/user/:username', function(req, res) {
+    console.log(req.params.username);
+    db.usermodels.find({
+        username: req.params.username
+    },
+    function(err, user) {
+        res.json(user);
+    });
+});
+
 //// SMACKTALK CRUD METHODS
 app.post('/rest/smacktalk/', function(req, res) {
     var newSmacktalk = req.body;

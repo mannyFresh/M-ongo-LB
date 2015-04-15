@@ -35,3 +35,12 @@ app.controller('ProfileCtrl', function($scope, $http){
         $scope.user = user;
     }
 });
+
+app.controller('ProfileDetailController', function($scope, $http, $routeParams) {
+    $http.get("/rest/user/" + $routeParams.username)
+    .success(function(user)
+    {
+        $scope.userProfile = user;
+        console.log(user);
+    });
+})

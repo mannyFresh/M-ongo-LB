@@ -26,12 +26,16 @@
     <!-- / SMACKTALK MODAL -->
     
     <table st-table="smacktalks" class="table table-striped">
-_id: "552c5db52e5c6a382dc0ff0c"author: "newMarc"date: "2015-04-14T00:14:18.881Z"text: "go sox"
 	    <tbody>
 	      <tr ng-repeat="smacktalk in smacktalks">
 	        <td>
 	        	{{smacktalk.date}}
-	        	<a href="#/player/{{player.playerID}}">{{smacktalk.author}}</a> said: {{smacktalk.text}}
+                <div ng-switch="currentUser.username != smacktalk.author">
+                    <a ng-href="#/profile/{{smacktalk.author}}" ng-switch-when="true">{{smacktalk.author}}</a>
+                    <a ng-href="#/profile/" ng-switch-when="false">you</a>
+                    said: {{smacktalk.text}}
+                </div>
+
 	        </td>
 	      </tr>
 	    </tbody>
