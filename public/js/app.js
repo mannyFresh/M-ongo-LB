@@ -4,7 +4,8 @@ var app = angular.module("PassportApp", ["ngRoute", "smart-table", "ui.bootstrap
 app.config(function($routeProvider, $httpProvider) {
     $routeProvider
       .when('/home', {
-          templateUrl: 'views/home/home.html'
+          templateUrl: 'views/home/home.html',
+          controller: 'HomeController'
       })
       .when('/profile', {
           templateUrl: 'views/profile/profile.html',

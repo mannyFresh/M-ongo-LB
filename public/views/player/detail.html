@@ -1,7 +1,7 @@
 <h1>
 	{{playerDetails.playerFirstName}} {{playerDetails.playerLastName}}
 	<span>
-		<small>{{playerDetails.teamID}} - {{playerDetails.POS}}</small>
+		<small>{{playerDetails.POS}}</small>
 	</span>
 	<button class="btn btn-active" ng-class="{ 'btn-warning' : currentUser.players.indexOf(playerDetails.playerID) != -1 }" ng-click="editFavPlayer(currentUser, playerDetails.playerID);">
 		<span class="glyphicon glyphicon-star" aria-hidden="true"></span>
@@ -17,10 +17,6 @@
 					<td>{{playerDetails.birthYear}}</td>
 					<th>Birthplace:</th>
 					<td>{{playerDetails.birthCity}}, {{playerDetails.birthState}}, {{playerDetails.birthCountry}}</td>
-				</tr>
-				<tr>
-					<th>Debut:</th>
-					<td>{{playerDetails.debut}}</td>
 				</tr>
 				<tr>
 					<th>Height:</th>
@@ -39,25 +35,75 @@
 	</div>
 </h1>
 <div class="container" ng-controller="PlayerDetailController">
-	<table st-table="playerDetails.seasonStats" class="table table-striped">
-    <thead>
-      <tr>
-        <th>season</th>
-        <th>team</th>
-      </tr>
-      <!--
-      <tr>
-      	<th colspan="5">
-      		<input st-search placeholder="global search" class="input-sm form-control" type="search"/>
-      	</th>-->
-      </tr>
-    </thead>
-    <tbody>
-      <tr ng-repeat="seasonStat in playerDetails.seasonStats">
-        <td>{{seasonStat.yearID}}</td>
-        <td>{{seasonStat.teamID}}</td>
-      </tr>
-    </tbody>
-  </table>
+	<div ng-if="playerDetails.POS == 'P'">
+	    <table st-table="playerDetails.seasonStats" class="table table-striped">
+	      <thead>
+	        <tr>
+	          <th>season</th>
+	          <th>team</th>
+	          <th>league</th>
+	          <th>wins</th>
+	          <th>losses</th>
+	          <th>saves</th>
+	          <th>k</th>
+	          <th>era</th>
+	        </tr>
+	        <!--
+	        <tr>
+	          <th colspan="5">
+	            <input st-search placeholder="global search" class="input-sm form-control" type="search"/>
+	          </th>-->
+	        </tr>
+	      </thead>
+	      <tbody>
+	        <!-- PITCHING -->
+	        <tr ng-repeat="seasonStat in playerDetails.seasonStats">
+	          <td>{{seasonStat.yearID}}</td>
+	          <td>{{seasonStat.teamID}}</td>
+	          <td>{{seasonStat.lgID}}</td>
+	          <td>{{seasonStat.W}}</td>
+	          <td>{{seasonStat.L}}</td>
+	          <td>{{seasonStat.SV}}</td>
+	          <td>{{seasonStat.SO}}</td>
+	          <td>{{seasonStat.ERA}}</td>
+	        </tr>
+	      </tbody>
+	    </table>
+	</div>
+	<div ng-if="playerDetails.POS != 'P'">
+		<table st-table="playerDetails.seasonStats" class="table table-striped">
+	      <thead>
+	        <tr>
+	          <th>season</th>
+	          <th>team</th>
+	          <th>league</th>
+	          <th>average</th>
+	          <th>r</th>
+	          <th>hr</th>
+	          <th>rbi</th>
+	          <th>sb</th>
+	        </tr>
+	        <!--
+	        <tr>
+	          <th colspan="5">
+	            <input st-search placeholder="global search" class="input-sm form-control" type="search"/>
+	          </th>-->
+	        </tr>
+	      </thead>
+	      <tbody>
+	        <!-- BATTING -->
+	        <tr ng-repeat="seasonStat in playerDetails.seasonStats">
+	          <td>{{seasonStat.yearID}}</td>
+	          <td>{{seasonStat.teamID}}</td>
+	          <td>{{seasonStat.lgID}}</td>
+	          <td>{{seasonStat.H / seasonStat.AB}}</td>
+	          <td>{{seasonStat.R}}</td>
+	          <td>{{seasonStat.HR}}</td>
+	          <td>{{seasonStat.RBI}}</td>
+	          <td>{{seasonStat.SB}}</td>
+	        </tr>
+	      </tbody>
+	    </table>
+	</div>
 </div>
 

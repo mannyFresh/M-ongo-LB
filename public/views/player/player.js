@@ -1,4 +1,5 @@
 app.controller("PlayerController", function($scope, $http, $routeParams) {
+
     $http.get('/rest/player')
     .success(function (response) {
       $scope.players = response;

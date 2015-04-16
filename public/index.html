@@ -1,5 +1,5 @@
 <link href="css/bootstrap.css" rel="stylesheet"/>
-<link href="css/typeahead.css" rel="stylesheet"/>
+<link href="css/style.css" rel="stylesheet"/>
 <script src="js/jquery-1.11.2.js"></script>
 <script src="js/bootstrap.js"></script>
 <script src="js/bootstrap.min.js"></script>
@@ -13,6 +13,7 @@
 <script src="js/bloodhound.js"></script>
 <script src="js/typeahead.bundle.js"></script>
 <script src="js/typeahead.jquery.js"></script>
+<script src="views/home/home.js"></script>
 <script src="views/login/login.js"></script>
 <script src="views/profile/profile.js"></script>
 <script src="views/nav/nav.js"></script>
@@ -34,30 +35,22 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-                <li>
-                    <a href="#home">Home</a>
+                <li ng-show="!currentUser">
+                    <a href="#login">login</a>
                 </li>
                 <li ng-show="!currentUser">
-                    <a href="#login">Login</a>
-                </li>
-                <li ng-show="!currentUser">
-                    <a href="#register">Register</a>
+                    <a href="#register">register</a>
                 </li>
                 <li ng-show="currentUser">
-                    <a href="#profile">Profile</a>
+                    <a href="#profile">profile</a>
                 </li>
                 <li ng-show="currentUser">
-                    <a href="#logout" ng-click="logout()">Logout</a>
+                    <a href="#team">teams</a>
                 </li>
                 <li ng-show="currentUser">
-                    <a href="#team">Teams</a>
+                    <a href="#player">players</a>
                 </li>
-                <li ng-show="currentUser">
-                    <a href="#player">Players</a>
-                </li>
-                <li ng-show="currentUser">
-                    <a href="#smacktalk">Smacktalk</a>
-                </li>
+                
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <!--<li><input class='typeahead' type="text" sf-typeahead options="exampleOptions" datasets="playersDataset" ng-model="selectedPlayer"></li>-->
@@ -68,6 +61,12 @@
                             <span class="input-group-addon"><span class="glyphicon glyphicon-pencil"></span>
                                 </span>-->
                                     <!--<input class='typeahead' type="text" sf-typeahead datasets="playersDataset" ng-model="selectedNumberNonEditable">-->
+                            <li ng-show="currentUser">
+                                <a href="#smacktalk">smacktalk</a>
+                            </li>
+                            <li ng-show="currentUser">
+                                <a href="#logout" ng-click="logout()">logout</a>
+                            </li>
                         </div>
                     </div>
                 </li>

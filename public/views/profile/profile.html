@@ -1,5 +1,5 @@
 <h1>Profile</h1>
-{{currentUser.username}}
+<!--{{currentUser.username}}
 {{currentUser.teams}}
 
 {{currentUser.players}}
@@ -11,7 +11,48 @@
 <input ng-model="currentUser.lastName" class="form-control"/><br/>
 <input ng-model="currentUser.email" class="form-control"/><br/>
 <button ng-click="update(currentUser)">Update</button>
+-->
+<div class="well">
+    <div id="myTabContent" class="tab-content">
+      <div class="tab-pane active in" id="user">
+        <form id="tab">
+            <label>username</label>
+            <input ng-model="currentUser.username" class="form-control"/>
+            <label>password</label>
+            <input ng-model="currentUser.password" class="form-control">
+            <label>first name</label>
+            <input ng-model="currentUser.firstName" class="form-control">
+            <label>last name</label>
+            <input ng-model="currentUser.lastName" class="form-control">
+            <label>email</label>
+            <input ng-model="currentUser.email" class="form-control">
+            <label>teams</label>
+            <label>players</label>
+            <div>
+                <button class="btn btn-primary" ng-click="update(currentUser)">update</button>
+            </div>
+        </form>
+      </div>
+  </div>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--
 <div ng-show="currentUser.roles.indexOf('admin') > -1">
     <h1>Admin</h1>
     <h2>User List</h2>    
@@ -41,4 +82,4 @@
             <td><button ng-click="select(user)">...</button>
         </tr>
     </table>
-</div>
+</div>-->

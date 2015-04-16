@@ -154,7 +154,8 @@ app.post('/rest/smacktalk/', function(req, res) {
     });*/
 });
 app.get('/rest/smacktalk', function(req, res) {
-    db.smacktalks.find(function(err, smacktalks) {
+    
+    db.smacktalks.find().sort({ date: -1 }, function (err, smacktalks) {
         res.json(smacktalks);
     });
 });

@@ -1,46 +1,6 @@
 <h1>Teams</h1>
 
 <div class="container" ng-controller="TeamController">
-    <!-- <nav ng-controller="NavCtrl">
-      <a href="#home">Home</a> |
-      <span ng-show="!currentUser">
-          <a href="#login">Login</a> |
-          <a href="#register">Register</a>
-      </span>
-      <span ng-show="currentUser">
-          <a href="#profile">Profile</a> |
-          <a href="#logout" ng-click="logout()">Logout</a>
-      </span>
-    </nav>
-    <div ng-view>
-    </div>
-  -->
-  <!--
-  <table st-table="teams" class="table table-striped">
-    <thead>
-      <tr>
-        <th st-sort="franchName">team name</th>
-        <th>franchise id</th>
-      </tr>
-      <tr>
-        <th>
-          <input st-search="franchName" placeholder="search for team name" class="input-sm form-control" type="search"/>
-        </th>
-      </tr>
-      </tr>
-    </thead>
-    <tbody>
-      <tr ng-repeat="team in teams">
-        <td><a href="#team/{{team.franchID}}" ng-click="getTeam(myName)">{{team.franchName}}</a></td>
-        <td>{{team.franchID}}</td>
-        <td>
-          <button class="btn btn-active" ng-class="{ 'btn-warning' : ((currentUser.teams.indexOf(team.franchID) != -1))}" ng-click="editFav(currentUser, team.franchID); isActive = !isActive">
-            <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
-          </button>
-        </td>
-      </tr>
-    </tbody>
-  </table>-->
   <table st-table="teamsDisplay" st-safe-src="teams" class="table table-striped">
   <thead>
   <tr>
