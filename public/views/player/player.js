@@ -81,9 +81,8 @@ app.controller("PlayerDetailController", function($scope, $http, $routeParams) {
         $http.delete('/rest/user/' + currentUser._id + '/player/' + playerID)
         .success(function(response) {
           //$scope.users = users;
-          $scope.users = response;
           $scope.currentUser = response;
-          console.log($scope.users);
+          console.log($scope.currentUser);
         });
       }
       

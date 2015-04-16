@@ -4,8 +4,7 @@ app.controller("SmacktalkController", function($scope, $modal, $http, $log) {
       $scope.smacktalks = response;
     });
 
-
-
+/*
     $scope.createSmack = function(smackPost) {
       smackPost.author = currentUser;
       console.log(smackPost);
@@ -15,7 +14,7 @@ app.controller("SmacktalkController", function($scope, $modal, $http, $log) {
         console.log(response);
       });
     }
-
+*/
     $scope.open = function (size) {
 
     var modalInstance = $modal.open({
@@ -57,7 +56,7 @@ angular.module('ui.bootstrap').controller('ModalInstanceCtrl', function ($scope,
       $http.post('/rest/smacktalk', smackPost)
       .success(function (response) {
         $scope.smacktalks = response;
-        //console.log(response);
+        console.log($scope.smacktalks);
       });
   };
 

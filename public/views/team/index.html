@@ -15,7 +15,6 @@
     <div ng-view>
     </div>
   -->
-  {{currentUser}}
   <!--
   <table st-table="teams" class="table table-striped">
     <thead>
@@ -61,11 +60,18 @@
       </td>
       <td>{{team.franchID}}</td>
       <td>
-        <button class="btn btn-default" ng-class="{ 'btn-warning' : ((currentUser.teams.indexOf(team.franchID) != -1))}" ng-click="editFav(currentUser, team.franchID); isActive = !isActive">
+        <button class="btn btn-active" ng-class="{ 'btn-warning' : ((currentUser.teams.indexOf(team.franchID) != -1))}" ng-click="editFav(currentUser, team.franchID); isActive = !isActive">
           <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
         </button>
       </td>
     </tr>
   </tbody>
+  <tfoot>
+      <tr>
+        <td colspan="5" class="text-center">
+          <div st-pagination="" st-items-by-page="10"></div>
+        </td>
+      </tr>
+    </tfoot>
 </table>
 </div>

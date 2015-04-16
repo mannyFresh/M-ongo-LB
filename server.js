@@ -138,11 +138,17 @@ app.get('/rest/user/:username', function(req, res) {
 //// SMACKTALK CRUD METHODS
 app.post('/rest/smacktalk/', function(req, res) {
     var newSmacktalk = req.body;
-
+/*
     db.smacktalks.insert(newSmacktalk, 
         db.smacktalks.find(function(err, smacktalks) {
             res.json(smacktalks);
         }));
+*/
+    db.smacktalks.insert(newSmacktalk);
+
+    db.smacktalks.find(function(err, smacktalks) {
+        res.json(smacktalks);
+    });
     /*db.smacktalks.insert(newSmacktalk, function (err, smacktalk) {
         res.json(smacktalk);
     });*/
@@ -310,7 +316,7 @@ app.post("/rest/user", auth, function(req, res){
 // BASEBALL DATA REQUESTS
 // get the index of baseball teams
 app.get('/rest/team', function(req, res) {
-    db.TeamFranchises.find().sort({franchName: 1}, function(err, data) {
+    db.TeamFranchises.find({active: 'Y'}).sort({franchName: 1}, function(err, data) {
         res.json(data);
     });
 });
@@ -331,9 +337,20 @@ app.get('/rest/team/:franchID', function(req, res) {
 
 // get the index of baseball players
 app.get('/rest/player', function(req, res) {
-    db.Master.find({nameLast: 'Johnson'}, function(err, data) {
-        res.json(data);
+/*
+    db.Master.find( { finalGame: { $regex: /2014/ } }, function (err, player) {
+        res.json(player);
     });
+*/
+    db.Master.aggregate([ 
+        { $match: { finalGame: { $regex: /2014/ } } }, 
+        { $project: { 
+            playerFullName: { $concat: ["$nameFirst", " ", "$nameLast"] }, 
+            playerID: "$playerID",
+            bats: "$bats",
+            throws: "$throws" } } ], function (err, players) {
+                res.json(players);
+            });
 });
 
 // get the detail of a baseball player

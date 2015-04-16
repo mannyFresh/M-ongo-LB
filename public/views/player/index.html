@@ -1,7 +1,5 @@
 <h1>Players</h1>
-{{currentUser}}
 <div class="container" ng-controller="PlayerController">
-
   <table st-table="playersDisplay" st-safe-src="players" class="table table-striped">
     <thead>
       <tr>
@@ -18,14 +16,14 @@
       </tr>-->
       <tr>
         <th>
-          <input st-search="nameFirst" placeholder="search for player name..." class="input-sm form-control" type="search"/>
+          <input st-search="playerFullName" placeholder="search for player..." class="input-sm form-control" type="search"/>
         </th>
       </tr>
     </thead>
     <tbody>
       <tr ng-repeat="player in playersDisplay">
         <td>
-          <a href="#/player/{{player.playerID}}">{{player.nameFirst}} {{player.nameLast}}</a>
+          <a href="#/player/{{player.playerID}}">{{player.playerFullName}}</a>
         </td>
         <td>{{player.playerID}}</td>
         <td>{{player.bats}}</td>
@@ -37,5 +35,12 @@
         </td>
       </tr>
     </tbody>
+    <tfoot>
+      <tr>
+        <td colspan="5" class="text-center">
+          <div st-pagination="" st-items-by-page="10"></div>
+        </td>
+      </tr>
+    </tfoot>
   </table>
 </div>
