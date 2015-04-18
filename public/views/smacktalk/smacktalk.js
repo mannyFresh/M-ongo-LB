@@ -1,8 +1,45 @@
-app.controller("SmacktalkController", function($scope, $modal, $http, $log) {
+app.factory("SmackFactory", function($http, $rootScope) {
+
+  var findAllSmacktalks = function (callback) {
     $http.get('/rest/smacktalk')
+    .success(function (smacktalks) {
+      $rootScope.smacktalks = smacktalks;
+    });
+  }
+
+  var createSmacktalk = function (smackPost) {
+    $http.post('/rest/smacktalk', smackPost)
+    .success(function(smacktalks) {
+      $rootScope.smacktalks = smacktalks;
+      console.log($rootScope.smacktalks);
+    });
+  }
+
+  var editSmackTalk = function (callback) {
+    $http.put('/rest/smacktalk')
+    .success(callback);
+  }
+
+  var deleteSmackTalk = function (callback) {
+    $http.delete('/rest/smacktalk')
+    .success(callback);
+  }
+
+  return {
+    findAllSmacktalks: findAllSmacktalks,
+    createSmacktalk: createSmacktalk,
+    editSmackTalk: editSmackTalk,
+    deleteSmackTalk: deleteSmackTalk
+  };
+});
+
+app.controller("SmacktalkController", function ($scope, $modal, $http, $log, SmackFactory) {
+    /*$http.get('/rest/smacktalk')
     .success(function (response) {
       $scope.smacktalks = response;
     });
+*/
+    SmackFactory.findAllSmacktalks();
 
 /*
     $scope.createSmack = function(smackPost) {
@@ -41,7 +78,7 @@ app.controller("SmacktalkController", function($scope, $modal, $http, $log) {
 
 });
 
-angular.module('ui.bootstrap').controller('ModalInstanceCtrl', function ($scope, $modalInstance, $http) {
+angular.module('ui.bootstrap').controller('ModalInstanceCtrl', function ($scope, $modalInstance, $http, SmackFactory) {
   /*
   $scope.items = items;
   $scope.selected = {
@@ -53,11 +90,15 @@ angular.module('ui.bootstrap').controller('ModalInstanceCtrl', function ($scope,
     $modalInstance.close();
     smackPost.author = currentUser.username;
     smackPost.date = new Date();
-      $http.post('/rest/smacktalk', smackPost)
+
+    SmackFactory.createSmacktalk(smackPost);
+
+    SmackFactory.findAllSmacktalks();
+      /*$http.post('/rest/smacktalk', smackPost)
       .success(function (response) {
         $scope.smacktalks = response;
         console.log($scope.smacktalks);
-      });
+      });*/
   };
 
   $scope.cancel = function () {

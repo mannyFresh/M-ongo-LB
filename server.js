@@ -145,10 +145,11 @@ app.post('/rest/smacktalk/', function(req, res) {
         }));
 */
     db.smacktalks.insert(newSmacktalk);
-
+/*
     db.smacktalks.find(function(err, smacktalks) {
+        console.log(smacktalks);
         res.json(smacktalks);
-    });
+    });*/
     /*db.smacktalks.insert(newSmacktalk, function (err, smacktalk) {
         res.json(smacktalk);
     });*/

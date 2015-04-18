@@ -20,7 +20,7 @@
       </td>
       <td>{{team.franchID}}</td>
       <td>
-        <button class="btn btn-active" ng-class="{ 'btn-warning' : ((currentUser.teams.indexOf(team.franchID) != -1))}" ng-click="editFav(currentUser, team.franchID); isActive = !isActive">
+        <button class="btn btn-active" ng-class="{ 'btn-warning' : ((currentUser.teams.indexOf(team.franchID) != -1))}" ng-click="editFav(currentUser, team.franchID); isActive = !isActive" tooltip="favorite / unfavorite" data-placement="right" tooltip-position="right">
           <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
         </button>
       </td>

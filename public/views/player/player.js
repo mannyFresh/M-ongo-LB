@@ -45,6 +45,7 @@ app.controller("PlayerController", function($scope, $http, $routeParams) {
           $scope.users = response;
           $scope.currentUser = response;
           console.log($scope.users);
+          toastr.success('player unfavorited!');
         });
       }
       
@@ -54,6 +55,7 @@ app.controller("PlayerController", function($scope, $http, $routeParams) {
             $scope.users = response;
             $scope.currentUser = response;
             console.log($scope.users);
+            toastr.success('player favorited!');
         });
       }
     }
@@ -84,6 +86,7 @@ app.controller("PlayerDetailController", function($scope, $http, $routeParams) {
           //$scope.users = users;
           $scope.currentUser = response;
           console.log($scope.currentUser);
+          toastr.success('player unfavorited!');
         });
       }
       
@@ -93,6 +96,7 @@ app.controller("PlayerDetailController", function($scope, $http, $routeParams) {
             $scope.users = response;
             $scope.currentUser = response;
             console.log($scope.users);
+            toastr.success('player favorited!');
         });
       }
     }

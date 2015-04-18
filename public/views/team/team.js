@@ -35,6 +35,7 @@ app.controller("TeamController", function($scope, $http, $routeParams) {
           $scope.users = response;
           $scope.currentUser = response;
           console.log(response);
+          toastr.success('team unfavorited!');
         });
       }
       
@@ -44,6 +45,7 @@ app.controller("TeamController", function($scope, $http, $routeParams) {
             $scope.users = response;
             $scope.currentUser = response;
             console.log(response);
+            toastr.success('team favorited!');
         });
       }
     }
