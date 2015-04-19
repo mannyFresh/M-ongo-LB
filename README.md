@@ -1,7 +1,7 @@
 # M(ongo)LB Web Application
 M(ongo)LB is a web application that retrieves Major League Baseball statistics for teams and players.
 Baseball statistics were provided by the [Sean Lahman Baseball Database]. Latest stats were from 2014.
-M(ongo)LB is hosed on [Openshift].
+M(ongo)LB is hosted on [Openshift].
 
 * MEAN Stack architecture
 * [Live demo]
