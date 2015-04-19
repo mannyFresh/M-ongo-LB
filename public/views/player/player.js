@@ -1,60 +1,61 @@
-app.controller("PlayerController", function($scope, $http, $routeParams) {
+app.factory("PlayerFactory", function($http, $rootScope) {
 
+  var findAllPlayers = function () {
+    $http.get('/rest/player')
+    .success(function (players) {
+      $rootScope.players = players;
+    });
+  }
+
+  var findPlayer = function (playerID) {
+    $http.get('/rest/player/' + playerID)
+    .success(function (player) {
+      $rootScope.playerDetails = player;
+    });
+  }
+
+  var removeFavPlayer = function (currentUserID, playerID, callback) {
+    $http.delete('/rest/user/' + currentUserID + '/player/' + playerID)
+    .success(callback);
+  }
+
+  var addFavPlayer = function (currentUserID, playerID, callback) {
+    $http.put('/rest/user/' + currentUserID + '/player/' + playerID)
+    .success(callback);
+  }
+
+  return {
+    findAllPlayers: findAllPlayers,
+    findPlayer: findPlayer,
+    removeFavPlayer: removeFavPlayer,
+    addFavPlayer: addFavPlayer
+  };
+
+});
+
+app.controller("PlayerController", function ($scope, $http, PlayerFactory) {
+/*
     $http.get('/rest/player')
     .success(function (response) {
       $scope.players = response;
     });
-/*
-    $http.get('/rest/player/' + $routeParams.playerID)
-    .success(function (response) {
-      console.log(response);
-      $scope.playerDetails = response[0];
-    });
 */
-    $scope.remove = function(id)
-    {
-      $http.delete('/rest/team/' + id)
-      .success(function (response) {
-        $scope.teams = response;
-      });
-    }
-
-    $scope.add = function(team)
-    {
-      $http.post('/rest/team', team)
-      .success(function (response) {
-        $scope.teams = response;
-      });
-    }
+    PlayerFactory.findAllPlayers();
 
     $scope.editFavPlayer = function(currentUser, playerID) {
-      //$http.put('rest/user/')
-      //console.log(currentUser);
-      /*
-      var newTeam = {
-        franchID: franchID,
-        teamName: franchName
-      }
-*/
-      //currentUser.teams.push(newTeam);
 
       if (currentUser.players.indexOf(playerID) > -1) {
-        $http.delete('/rest/user/' + currentUser._id + '/player/' + playerID)
-        .success(function(response) {
-          //$scope.users = users;
+        PlayerFactory.removeFavPlayer(currentUser._id, playerID, function(response) {
           $scope.users = response;
           $scope.currentUser = response;
-          console.log($scope.users);
           toastr.success('player unfavorited!');
         });
       }
       
       else {
-        $http.put('/rest/user/' + currentUser._id + '/player/' + playerID)
-        .success(function(response){
+        PlayerFactory.addFavPlayer(currentUser._id, playerID, function(response){
             $scope.users = response;
             $scope.currentUser = response;
-            console.log($scope.users);
             toastr.success('player favorited!');
         });
       }
@@ -62,40 +63,24 @@ app.controller("PlayerController", function($scope, $http, $routeParams) {
 
 });
 
-app.controller("PlayerDetailController", function($scope, $http, $routeParams) {
-    $http.get('/rest/player/' + $routeParams.playerID)
-    .success(function (response) {
-      console.log(response);
-      $scope.playerDetails = response;
-    });
+app.controller("PlayerDetailController", function($scope, $http, $routeParams, PlayerFactory) {
+    
+    PlayerFactory.findPlayer($routeParams.playerID);
 
     $scope.editFavPlayer = function(currentUser, playerID) {
-      //$http.put('rest/user/')
-      //console.log(currentUser);
-      /*
-      var newTeam = {
-        franchID: franchID,
-        teamName: franchName
-      }
-*/
-      //currentUser.teams.push(newTeam);
 
       if (currentUser.players.indexOf(playerID) > -1) {
-        $http.delete('/rest/user/' + currentUser._id + '/player/' + playerID)
-        .success(function(response) {
-          //$scope.users = users;
+        PlayerFactory.removeFavPlayer(currentUser._id, playerID, function(response) {
+          $scope.users = response;
           $scope.currentUser = response;
-          console.log($scope.currentUser);
           toastr.success('player unfavorited!');
         });
       }
       
       else {
-        $http.put('/rest/user/' + currentUser._id + '/player/' + playerID)
-        .success(function(response){
+        PlayerFactory.addFavPlayer(currentUser._id, playerID, function(response){
             $scope.users = response;
             $scope.currentUser = response;
-            console.log($scope.users);
             toastr.success('player favorited!');
         });
       }

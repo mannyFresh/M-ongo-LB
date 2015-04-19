@@ -1,17 +1,4 @@
 <h1>Profile</h1>
-<!--{{currentUser.username}}
-{{currentUser.teams}}
-
-{{currentUser.players}}
-
-<h1>Update Profile</h1>
-<input ng-model="currentUser.username" class="form-control"/><br/>
-<input ng-model="currentUser.password" class="form-control" type="password"/><br/>
-<input ng-model="currentUser.firstName" class="form-control"/><br/>
-<input ng-model="currentUser.lastName" class="form-control"/><br/>
-<input ng-model="currentUser.email" class="form-control"/><br/>
-<button ng-click="update(currentUser)">Update</button>
--->
 <div class="well">
     <div id="myTabContent" class="tab-content">
       <div class="tab-pane active in" id="user">
@@ -26,9 +13,31 @@
             <input ng-model="currentUser.lastName" class="form-control">
             <label>email</label>
             <input ng-model="currentUser.email" class="form-control">
-            <label>teams</label>
-            <label>players</label>
+            <br>
+            <accordion>
+                <accordion-group heading="favorite players">
+                    <div ng-repeat="player in currentUser.players">
+                        <a href="#/player/{{player}}">{{player}}</a>
+                    </div>
+                </accordion-group>
+                <accordion-group heading="favorite teams">
+                    <div ng-repeat="team in currentUser.teams">
+                        <a href="#/team/{{team}}">{{team}}</a>
+                    </div>
+                </accordion-group>
+                <accordion-group heading="following">
+                    <div ng-repeat="leader in currentUser.following">
+                        <a href="#/profile/{{leader}}">{{leader}}</a>
+                    </div>
+                </accordion-group>
+                <accordion-group heading="followers">
+                    <div ng-repeat="follower in currentUser.followers">
+                        <a href="#/profile/{{follower}}">{{leader}}</a>
+                    </div>
+                </accordion-group>
+            </accordion>
             <div>
+                <br>
                 <button class="btn btn-primary" ng-click="update(currentUser)">update</button>
             </div>
         </form>

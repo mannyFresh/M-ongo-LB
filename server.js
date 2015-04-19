@@ -25,7 +25,9 @@ var UserSchema = new mongoose.Schema({
     email: String,
     roles: [String],
     teams: [String],
-    players: [String]
+    players: [String],
+    followers: [String],
+    following: [String]
 });
 
 var UserModel = mongoose.model('UserModel', UserSchema);
@@ -48,23 +50,9 @@ app.use(passport.session());
 
 app.use(express.static(__dirname + '/public'));
 
-//var users =
-//[
-//    {username: 'alice', password: 'alice', firstName: 'Alice', lastName: 'Wonderland', roles: ['admin', 'student', 'instructor']},
-//    {username: 'bob', password: 'bob', firstName: 'Bob', lastName: 'Marley', roles: ['student']},
-//    {username: 'charlie', password: 'charlie', firstName: 'Charlie', lastName: 'Brown', roles: ['instructor']}
-//];
-
 passport.use(new LocalStrategy(
 function(username, password, done)
 {
-//    for(var u in users)
-//    {
-//        if(username == users[u].username && password == users[u].password)
-//        {
-//            return done(null, users[u]);
-//        }
-//    }
     UserModel.findOne({username: username, password: password}, function(err, user)
     {
         if (err) { return done(err); }
@@ -125,7 +113,7 @@ app.post('/register', function(req, res)
 });
 
 /// RETRIEVE USER PROFILE
-app.get('/rest/user/:username', function(req, res) {
+app.get('/rest/user/:username', function (req, res) {
     console.log(req.params.username);
     db.usermodels.find({
         username: req.params.username
@@ -135,24 +123,70 @@ app.get('/rest/user/:username', function(req, res) {
     });
 });
 
+//// FOLLOW USER PROFILE
+app.put('/rest/user/:currentusername/:username', function (req, res) {
+    var currentUserObject;
+    // currentusername FOLLOWED username
+    db.runCommand({ 
+        findAndModify: "usermodels",
+        query: { username: req.params.currentusername },
+        update: { $addToSet: { following: req.params.username } }, 
+        new: true
+    }, function (err, res) {
+        currentUserObject = res.value;
+    });
+
+    // username has FOLLOWER currentusername
+    db.runCommand({
+        findAndModify: "usermodels",
+        query: { username: req.params.username },
+        update: { $addToSet: { followers: req.params.currentusername } },
+        new: true
+    }, function (err, response) {
+        console.log(currentUserObject);
+        returnObject = {
+            currentUserObject: currentUserObject,
+            userProfile: response.value
+        }
+        res.json(returnObject);
+    });
+});
+
+app.delete('/rest/user/:currentusername/:username', function (req, res) {
+    var currentUserObject;
+    // currentusername UNFOLLOWED username
+    db.runCommand({ 
+        findAndModify: "usermodels",
+        query: { username: req.params.currentusername },
+        update: { $pull: { following: req.params.username } },
+        new: true
+    }, function (err, res) {
+        currentUserObject = res.value;
+    });
+
+    // username does NOT HAVE FOLLOWER currentusername
+    db.runCommand({
+        findAndModify: "usermodels",
+        query: { username: req.params.username },
+        update: { $pull: { followers: req.params.currentusername } },
+        new: true
+    }, function (err, response) {
+
+        console.log(currentUserObject);
+        returnObject = {
+            currentUserObject: currentUserObject,
+            userProfile: response.value
+        }
+        res.json(returnObject);
+    });
+});
+
 //// SMACKTALK CRUD METHODS
-app.post('/rest/smacktalk/', function(req, res) {
+app.post('/rest/smacktalk/', function (req, res) {
     var newSmacktalk = req.body;
-/*
-    db.smacktalks.insert(newSmacktalk, 
-        db.smacktalks.find(function(err, smacktalks) {
-            res.json(smacktalks);
-        }));
-*/
+
     db.smacktalks.insert(newSmacktalk);
-/*
-    db.smacktalks.find(function(err, smacktalks) {
-        console.log(smacktalks);
-        res.json(smacktalks);
-    });*/
-    /*db.smacktalks.insert(newSmacktalk, function (err, smacktalk) {
-        res.json(smacktalk);
-    });*/
+
 });
 app.get('/rest/smacktalk', function(req, res) {
     
@@ -171,11 +205,6 @@ var auth = function(req, res, next)
 
 app.get("/rest/user", auth, function(req, res)
 {
-    /*
-    UserModel.find(function(err, users)
-    {
-        res.json(users);
-    });*/
     db.usermodels.find(function(err, users) {
         res.json(users);
     });
@@ -192,7 +221,6 @@ app.delete("/rest/user/:id", auth, function(req, res){
 });
 
 app.put("/rest/user/:id", auth, function(req, res){
-    //console.log(req.body);
 
     UserModel.findById(req.params.id, function(err, user){
         user.update(req.body, function(err, count){
@@ -200,28 +228,11 @@ app.put("/rest/user/:id", auth, function(req, res){
             res.json(req.body);
         });
     });
-/*
-    db.usermodels.find({ "_id": ObjectId('"' + req.params.id +'"')}, function(user, err) {
-        user.update(req.body, function(count, err) {
-            db.usermodels.find(function(users, err) {
-                res.json(users);
-            });
-        });
-    });
-*/
 });
 
 // Adding and removing favorite baseball teams
 app.put("/rest/user/:id/team/:franchID", auth, function(req, res) {
-/*
-    db.usermodels.update(
-        { _id: ObjectId(req.params.id) }, 
-        { $addToSet: { teams: req.params.franchID } },
-        function (err, response) {
-            console.log("hihi");
-            res.json(response);
-        });
-*/
+
     db.runCommand(
     {
         findAndModify: "usermodels",
@@ -234,12 +245,7 @@ app.put("/rest/user/:id/team/:franchID", auth, function(req, res) {
 });
 
 app.delete("/rest/user/:id/team/:franchID", auth, function(req, res) {
-    /*db.usermodels.update(
-        { _id: ObjectId(req.params.id) },
-        { $pull: { teams : req.params.franchID } },
-        function (err, response) {
-            res.json(response);
-        });*/
+
     db.runCommand(
     {
         findAndModify: "usermodels",
@@ -253,15 +259,7 @@ app.delete("/rest/user/:id/team/:franchID", auth, function(req, res) {
 
 //// Adding and removing favorite baseball players
 app.put("/rest/user/:id/player/:playerID", auth, function(req, res) {
-/*
-    db.usermodels.update(
-        { _id: ObjectId(req.params.id) }, 
-        { $addToSet: { teams: req.params.franchID } },
-        function (err, response) {
-            console.log("hihi");
-            res.json(response);
-        });
-*/
+
     db.runCommand(
     {
         findAndModify: "usermodels",
@@ -274,12 +272,7 @@ app.put("/rest/user/:id/player/:playerID", auth, function(req, res) {
 });
 
 app.delete("/rest/user/:id/player/:playerID", auth, function(req, res) {
-    /*db.usermodels.update(
-        { _id: ObjectId(req.params.id) },
-        { $pull: { teams : req.params.franchID } },
-        function (err, response) {
-            res.json(response);
-        });*/
+
     db.runCommand(
     {
         findAndModify: "usermodels",
@@ -313,8 +306,6 @@ app.post("/rest/user", auth, function(req, res){
     });
 });
 
-
-
 // BASEBALL DATA REQUESTS
 // get the index of baseball teams
 app.get('/rest/team', function(req, res) {
@@ -331,19 +322,12 @@ app.get('/rest/team/:franchID', function(req, res) {
     db.Teams.find({teamIDBR: teamIDBR}, function(err, data) {
         res.json(data);
     });
-    /*
-    db.TeamFranchises.findOne({franchID: franchID}, function(err, data) {
-        res.json(data);
-    });*/
+
 });
 
 // get the index of baseball players
 app.get('/rest/player', function(req, res) {
-/*
-    db.Master.find( { finalGame: { $regex: /2014/ } }, function (err, player) {
-        res.json(player);
-    });
-*/
+
     db.Master.aggregate([ 
         { $match: { finalGame: { $regex: /2014/ } } }, 
         { $project: { 
@@ -361,7 +345,7 @@ app.get('/rest/player/:playerID', function(req, res) {
     var playerID = req.params.playerID;
 
     db.Fielding.find({playerID: playerID}).sort({yearID: -1}[0], function(err, data) {
-        //console.log(data);
+
         var playerObject = data[0];
         var seasonStats = {};
         var player = {
@@ -415,4 +399,10 @@ app.get('/rest/player/:playerID', function(req, res) {
     });
 });
 
-app.listen(3000);
+// listen
+var ipaddress = process.env.OPENSHIFT_NODEJS_IP || "127.0.0.1";
+var port = process.env.OPENSHIFT_NODEJS_PORT || 8080;
+
+app.listen(port, ipaddress, function() {
+    console.log((new Date()) + ' Server is listening on port 8080');
+});

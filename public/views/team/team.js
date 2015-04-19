@@ -1,51 +1,57 @@
-app.controller("TeamController", function($scope, $http, $routeParams) {
+app.factory("TeamFactory", function ($http, $rootScope) {
 
-    $http.get('/rest/team')
-    .success(function (response) {
-      $scope.teams = response;
+  var findAllTeams = function () {
+    $http.get("/rest/team")
+    .success(function (teams) {
+      $rootScope.teams = teams;
     });
+  }
 
-    $http.get('/rest/team/' + $routeParams.franchID)
-    .success(function (response) {
-      $scope.teamDetails = response;
+  var findTeam = function (franchID) {
+    $http.get('/rest/team/' + franchID)
+    .success(function (team) {
+      $rootScope.teamDetails = team;
     });
+  }
 
-    $scope.isFav = function(currentUser, teamID) {
-      if (currentUser.teams.indexOf(teamID) != -1) {
-        var isActive = true;
-        return isActive;
-      }
-    }
+  var removeFavTeam = function (currentUserID, teamID, callback) {
+    $http.delete('/rest/user/' + currentUserID + '/team/' + teamID)
+    .success(callback);
+  }
+
+  var addFavTeam = function (currentUserID, teamID, callback) {
+    $http.put('/rest/user/' + currentUserID + '/team/' + teamID)
+    .success(callback);
+  }
+
+  return {
+    findAllTeams: findAllTeams,
+    findTeam: findTeam,
+    removeFavTeam: removeFavTeam,
+    addFavTeam: addFavTeam
+  };
+
+});
+
+app.controller("TeamController", function ($scope, $http, $routeParams, TeamFactory) {
+
+    TeamFactory.findAllTeams();
+
+    TeamFactory.findTeam($routeParams.franchID);
 
     $scope.editFav = function(currentUser, franchID) {
-      //$http.put('rest/user/')
-      //console.log(currentUser);
-      /*
-      var newTeam = {
-        franchID: franchID,
-        teamName: franchName
-      }
-*/
-      //currentUser.teams.push(newTeam);
 
-      if (currentUser.teams.indexOf(franchID) > -1) {
-        $http.delete('/rest/user/' + currentUser._id + '/team/' + franchID)
-        .success(function(response) {
-          //$scope.users = users;
-          $scope.users = response;
+      if (currentUser.teams.indexOf(franchID) != -1) {
+        TeamFactory.removeFavTeam(currentUser._id, franchID, function(response) {
           $scope.currentUser = response;
-          console.log(response);
           toastr.success('team unfavorited!');
         });
       }
       
       else {
-        $http.put('/rest/user/' + currentUser._id + '/team/' + franchID)
-        .success(function(response){
-            $scope.users = response;
-            $scope.currentUser = response;
-            console.log(response);
-            toastr.success('team favorited!');
+        TeamFactory.addFavTeam(currentUser._id, franchID, function(response) {
+          $scope.currentUser = response;
+          toastr.success('team favorited!');
         });
       }
     }
