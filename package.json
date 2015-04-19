@@ -1,12 +1,12 @@
 {
-  "name": "PassportJS",
+  "name": "M(ongo)LB",
   "version": "1.0.0",
-  "description": "Simple PassportJS MEAN Web App",
-  "main": "index.js",
+  "description": "Major League Baseball statistics streamlined",
+  "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Jose Annunziato",
+  "author": "Marc J. Savino",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.12.2",

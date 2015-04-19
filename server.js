@@ -6,6 +6,7 @@ var passport      = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 var cookieParser  = require('cookie-parser');
 var session       = require('express-session');
+var server = require('http').createServer(app);
 
 // mongoose
 var mongojs = require('mongojs');
@@ -403,6 +404,6 @@ app.get('/rest/player/:playerID', function(req, res) {
 var ipaddress = process.env.OPENSHIFT_NODEJS_IP || "127.0.0.1";
 var port = process.env.OPENSHIFT_NODEJS_PORT || 8080;
 
-app.listen(port, ipaddress, function() {
+server.listen(port, ipaddress, function() {
     console.log((new Date()) + ' Server is listening on port 8080');
 });

@@ -32,7 +32,7 @@
                 </accordion-group>
                 <accordion-group heading="followers">
                     <div ng-repeat="follower in currentUser.followers">
-                        <a href="#/profile/{{follower}}">{{leader}}</a>
+                        <a href="#/profile/{{follower}}">{{follower}}</a>
                     </div>
                 </accordion-group>
             </accordion>
@@ -43,24 +43,6 @@
         </form>
       </div>
   </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 <!--
 <div ng-show="currentUser.roles.indexOf('admin') > -1">
     <h1>Admin</h1>

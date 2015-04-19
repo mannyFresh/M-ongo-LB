@@ -14,7 +14,7 @@
         	<p>M(ongo)LB is a MEAN stack application. It retrieves baseball statistics for teams and players who were last active in 2014. The data is from the <a href="http://www.seanlahman.com/baseball-archive/statistics/">Sean Lahman Baseball Database</a>. Enjoy!</p>
         </div>
 
-        <div class="modal-footer">
+        <div ng-show="!currentUser" class="modal-footer">
             <button class="btn btn-primary" ng-click="loginOrRegister('/login')">log in</button>
             <button class="btn btn-warning" ng-click="loginOrRegister('/register')">register</button>
         </div>
