@@ -224,6 +224,8 @@ app.delete("/rest/user/:id", auth, function(req, res){
 app.put("/rest/user/:id", auth, function(req, res){
 
     UserModel.findById(req.params.id, function(err, user){
+        delete req.body._id;
+        
         user.update(req.body, function(err, count){
 
             res.json(req.body);
